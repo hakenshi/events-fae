@@ -2,9 +2,9 @@
 
 include("App.php");
 
-$app = new App;
+$app = new App;;
 
-$events = $app->showEventInfo();
+$events = $app->showEventInfo($sql = "SELECT * FROM imagens where data_evento >= now() LIMIT 11");
 
 $placeholder_image = "images/fae.png";
 
@@ -29,32 +29,32 @@ $placeholder_image_white = "images/fae-branca.png";
 <body>
     <header class="img-header">
 
-        <?php if(!$events): ?>
+        <?php if (!$events) : ?>
             <button type="button" class="miniature-button">
                 <img class="miniature-image" src="<?php echo $placeholder_image_white ?>" style="opacity: 1;">
             </button>
-            <?php else:?>
-       <?php foreach ($events as $index => $event) : ?>
-            <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="<?php echo $index; ?>" class="miniature-button <?php echo ($index === 0) ? 'active' : ''; ?>">
-                <img class="miniature-image" src="<?php echo $event['fotos']; ?>" <?php echo ($index === 0) ? 'style="opacity: 1;"' : ''; ?>>
-            </button>
-        <?php endforeach; ?>
-        <?php endif;?>
+        <?php else : ?>
+            <?php foreach ($events as $index => $event) : ?>
+                <button type="button" data-bs-target="#imageCarousel" data-bs-slide-to="<?php echo $index; ?>" class="miniature-button <?php echo ($index === 0) ? 'active' : ''; ?>">
+                    <img class="miniature-image" src="<?php echo $event['fotos']; ?>" <?php echo ($index === 0) ? 'style="opacity: 1;"' : ''; ?>>
+                </button>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </header>
     <main class="container">
         <div class="p-5 carousel slide" id="imageCarousel" data-bs-ride="carousel" data-bs-ride="true">
             <div class="carousel-inner">
-                <?php if(!$events) :?>
+                <?php if (!$events) : ?>
                     <div class="carouse-item active">
                         <img src="<?php echo $placeholder_image ?>" alt="" class="main-image">
                     </div>
-                <?php else:?>
-                <?php foreach ($events as $index => $event) : ?>
-                    <div class="carousel-item <?php echo ($index === 0) ? 'active' : ''; ?>" data-bs-interval="<?php echo $event['tempo_duracao'] * 1000 ?>">
-                        <img class="main-image" src="<?php echo $event['fotos']; ?>">
-                    </div>
-                <?php endforeach; ?>
-                <?php endif;?>
+                <?php else : ?>
+                    <?php foreach ($events as $index => $event) : ?>
+                        <div class="carousel-item <?php echo ($index === 0) ? 'active' : ''; ?>" data-bs-interval="<?php echo $event['tempo_duracao'] * 1000 ?>">
+                            <img class="main-image" src="<?php echo $event['fotos']; ?>">
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </main>

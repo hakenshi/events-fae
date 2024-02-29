@@ -34,3 +34,25 @@ input[type="file"] {
     padding: 10px;
 }
 
+.events-card{
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    height: 200%;
+}
+
+.bg-unifae{
+    background-color: #2FBBAF;
+    color: white;
+    font-weight: bold;
+}
+
+.table-dark {
+    background-color: #2FBBAF !important;
+    color: white;
+    font-weight: bold;
+}

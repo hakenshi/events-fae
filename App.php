@@ -62,15 +62,11 @@ class App
     }
 
 
-    public function showEventInfo()
+    public function showEventInfo($sql)
     {
         $database = new Database;
 
         $pdo = $database->connect();
-
-        $sql = "SELECT * FROM imagens
-        where now() <= data_evento
-        LIMIT 11";
 
         $statement = $pdo->prepare($sql);
         $statement->execute();
@@ -82,6 +78,33 @@ class App
             return "erro ao listar dados" . $e->getMessage();
         }
     }
+
+    public function deleteEvent($id){
+        $database = new Database;
+        $pdo = $database->connect();
+
+       $id = intval($id);
+
+        try {
+            $sql = "DELETE FROM imagens WHERE id = :id";
+
+            $statement = $pdo->prepare($sql);
+            $statement->bindParam(":id", $id, PDO::PARAM_INT);
+
+            $statement->execute();
+
+            $response['code'] = 200;
+            $response['mensagem'] = 'Imagem apagada com sucesso';
+
+            return json_encode($response);
+        } catch (\PDOException $e) {
+            $response['code'] = 500;
+            $response['mensagem'] = 'Erro ao apagar imagem ' . $e->getMessage();
+            return json_encode($response);
+        }
+
+    }
+
 }
 
 $app = new App;
@@ -93,4 +116,9 @@ if (isset($_POST['eventTitle'], $_POST['eventDescription'], $_POST['eventDateTim
     $eventDuration = $_POST['eventDuration'];
     $fileName = $_FILES['eventPhoto'];
     echo $app->uploadEventInfo($eventTitle, $eventDescription, $eventDateTime, $eventDuration, $fileName);
+}
+
+if(isset($_POST['id'])){
+$id = $_POST['id'];
+$app->deleteEvent($id);
 }

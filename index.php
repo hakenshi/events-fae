@@ -1,73 +1,91 @@
-<!DOCTYPE html>
+<?php
+
+include("App.php");
+
+$app = new App;
+
+
+
+$events = $app->showEventInfo($sql = "SELECT * FROM imagens");
+?>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <title>Cadastrar Evento</title>
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
 </head>
 
 <body>
-    <div class="container">
-        <div class="row justify-content-center align-items-center flex-column">
-            <div class="col-5 pt-5">
-                <form id="form" method="post" enctype="multipart/form-data">
-                    <div class="rounded ">
-                        <span id="espera" class="spinner-border text-danger" style="display: none;"></span>
-                        <img id="img" class="img-fluid rounded border-dark border" style="object-fit: cover; width: 100%; height: 300px;" />
-                    </div>
-                    <div class="row form-floating p-2">
-                        <input id="event-title" name="event-title" class="form-control" type="text" placeholder="Insira o nome do evento">
-                        <label for="event-title">Nome do evento</label>
-                    </div>
-                    <div class="row form-floating p-2">
-                        <textarea class="form-control" name="event-description" id="event-description" rows="4" cols="10" placeholder="Insira uma descrição para o evento" style="height: 100px; min-height: 100px; max-height: 150px;"></textarea>
-                        <label for="event-description">Título do evento</label>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 p-2 form-floating">
+    <nav class="nav bg-unifae justify-content-center p-3">
+        <a class="nav-link text-light" href="resgister_event.php" aria-current="page"> Cadastar Evento</a>
+        <a class="nav-link text-light" href="events.php" aria-current="page"> Exibir Eventos</a>
+    </nav>
 
-                            <input id="event-datetime" name="event-datetime" class="form-control" type="datetime-local" placeholder="10/04/2019">
-                            <label for="event-description">Data do evento</label>
 
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col p-5">
+
+
+                    <?php if (!$events) { ?>
+                        <div class="events-card">
+                                <a href="resgister_event.php" class="btn"> <p class="h1">Sem eventos disponíveis!</p>
+                                <small>clique aqui para cadastrar um novo evento</small>
+                            </a>
                         </div>
-                        <div class="col-6 p-2 form-floating">
+                    <?php } else { ?>
 
-                            <input id="event-duration" name="event-duration" class="form-control" type="number" placeholder="Insira uma duração em segundos" min="10" max="60" value="10">
 
-                            <label for="event-description">Duração do evento</label>
-                            <small class="text-center">Insira a duração do evento em segundos</small>
-                        </div>
-                    </div>
-                    <div class="row d-flex flex-row justify-content-between">
+                        <table class="table table-responsive">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="mx-2" scope="col">Evento</th>
+                                    <th class="mx-2">Descrição</th>
+                                    <th class="mx-2" scope="col">Data</th>
+                                    <th class="mx-2" scope="col">Foto</th>
+                                    <th class="mx-2" colspan="2" scope="col"></th>
+                                    <th class="mx-2" colspan="2" scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        <div class="col p-2 ">
-                            <input class="align-content-end form-control" type="file" name="event-photo" id="event-photo" accept=".png, .jpg" onch>
-                            <small>A imagem deve ter proporção de 16:9 ou 16:10 e não deve exceder 2MB</small>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center align-items-center">
-                        <div class="col-auto pt-4">
-                            <button type="submit" class="btn btn-primary" style="
-                                font-size: 20px;
-                                padding: 7px 8px;
-                                width: 110%;
-                                ">
-                                Enviar
-                            </button>
 
-                        </div>
-                    </div>
-                </form>
+                                <?php foreach ($events as $index => $event) : ?>
+                                    <tr>
+                                        <td class="p-3 nomeEvento"><?php echo $event['nome_evento'] ?></td>
+
+                                        <td class="p-3 descricaoEvento"><?php echo $event['descricao_evento'] ?></td>
+
+                                        <td class="p-3 dataEvento"><?php echo $event['data_evento'] ?></td>
+
+                                        <td class="p-3"><img class="img-fluid fotos" src="<?php echo $event['fotos'] ?>" alt="" style="width: 10%;"></td>
+                                        <td class="p-3"><a href="edit_event.php/?id=<?php echo $event['id'] ?>" class="btn btn-success" type="button">Editar</a>
+                                        </td>
+                                        <td><input class="id" type="hidden" name="id" value="<?php echo $event['id'] ?>"></td>
+                                        <td class="p-3 "><button onclick="removeEvent(this)" class="btn btn-danger" type="button">Apagar</button></td>
+                                    </tr>
+                            <?php endforeach;
+                            } ?>
+
+                            </tbody>
+                        </table>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+
     <script src="jquery-3.7.1.min.js"></script>
-    <script src="ajax.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous">
-    </script>
+    <script src="images.js"></script>
+
 </body>
 
 </html>

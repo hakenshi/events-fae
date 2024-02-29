@@ -75,11 +75,12 @@ $("#form").on('submit', async e => {
         })
     
         if (!file || !eventTitle || !eventDescription || !eventDateTime) {
-            console.error("Favor preencher todos os dados");
+            alert("Favor preencher todos os dados");
             return;
         }
         
         const formData = new FormData($("#form")[0]);
+        
         formData.append('eventTitle', eventTitle);
         formData.append('eventDescription', eventDescription);
         formData.append('eventDateTime', eventDateTime);
@@ -94,21 +95,23 @@ $("#form").on('submit', async e => {
             data: formData,
             dataType: "json",
             success: function (response) {
-                if (response.code === 200)
-                    console.log(response.mensagem);
+                if (response.code === 200){
+                    alert(response.mensagem);
+                    location.replace("eventos/index.php")
+                }
                 else if (response.code === 500 || response.code === 409) {
-                    console.log(response.mensagem);
+                    alert(response.mensagem);
                     return;
                 } else {
-                    console.log(response.mensagem);
+                    alert(response.mensagem);
                     return;
                 }
             },
             error: (status, error, xhr) => {
-                console.error(`status: ${status}\nerror: ${error}\nxhr: ${xhr}`);
+               alert(`status: ${status}\nerror: ${error}\nxhr: ${xhr}`);
             }
         });
     } catch (error) {
-        console.error(`Erro ao enviar o formulário: ${error}`);
+        alert(`Erro ao enviar o formulário: ${error}`);
     }
 });
