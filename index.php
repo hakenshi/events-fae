@@ -5,8 +5,8 @@ include("App.php");
 $app = new App;
 
 
-
 $events = $app->showEventInfo($sql = "SELECT * FROM imagens");
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -66,7 +66,7 @@ $events = $app->showEventInfo($sql = "SELECT * FROM imagens");
                                         <td class="p-3 dataEvento"><?php echo $event['data_evento'] ?></td>
 
                                         <td class="p-3"><img class="img-fluid fotos" src="<?php echo $event['fotos'] ?>" alt="" style="width: 10%;"></td>
-                                        <td class="p-3"><a href="edit_event.php/?id=<?php echo $event['id'] ?>" class="btn btn-success" type="button">Editar</a>
+                                        <td class="p-3"><a href="edit_event.php?id=<?php echo $event['id'] ?>" class="btn btn-success" type="button">Editar</a>
                                         </td>
                                         <td><input class="id" type="hidden" name="id" value="<?php echo $event['id'] ?>"></td>
                                         <td class="p-3 "><button onclick="removeEvent(this)" class="btn btn-danger" type="button">Apagar</button></td>

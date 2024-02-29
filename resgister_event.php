@@ -19,7 +19,7 @@
                         <img id="img" class="img-fluid rounded border-dark border" style="object-fit: cover; width: 100%; height: 300px;" />
                     </div>
                     <div class="row form-floating p-2">
-                        <input id="event-title" name="event-title" class="form-control" type="text" placeholder="Insira o nome do evento">
+                        <input id="event-title" name="event-title" class="form-control" type="text" placeholder="Insira o nome do evento" autocomplete="off">
                         <label for="event-title">Nome do evento</label>
                     </div>
                     <div class="row form-floating p-2">

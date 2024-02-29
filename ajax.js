@@ -1,9 +1,9 @@
 // Selecionando o elemento jQuery para eventPhoto
 const eventPhoto = $("#event-photo");
 
-const dateFomater = (args) =>{
+const dateFomater = (args) => {
     const date = new Date(args)
-    const formater = new Intl.DateTimeFormat("pt-br",{
+    const formater = new Intl.DateTimeFormat("pt-br", {
         dateStyle: "short",
         timeStyle: "medium"
     })
@@ -70,17 +70,17 @@ $("#form").on('submit', async e => {
         const eventDateTime = $("#event-datetime").val();
         const eventDuration = $("#event-duration").val();
 
-        const renamedFile = new File([file], `${eventTitle}-${dateFomater(eventDateTime)}_photo.${file.name.split('.').pop()}`,{
+        const renamedFile = new File([file], `${eventTitle}-${dateFomater(eventDateTime)}_photo.${file.name.split('.').pop()}`, {
             type: file.type,
         })
-    
+
         if (!file || !eventTitle || !eventDescription || !eventDateTime) {
             alert("Favor preencher todos os dados");
             return;
         }
-        
+
         const formData = new FormData($("#form")[0]);
-        
+
         formData.append('eventTitle', eventTitle);
         formData.append('eventDescription', eventDescription);
         formData.append('eventDateTime', eventDateTime);
@@ -89,15 +89,16 @@ $("#form").on('submit', async e => {
 
         $.ajax({
             type: "post",
-            url: "App.php",
+            url: "registrarEvento.php",
             contentType: false,
             processData: false,
             data: formData,
             dataType: "json",
             success: function (response) {
-                if (response.code === 200){
+                if (response.code === 200) {
                     alert(response.mensagem);
-                    location.replace("eventos/index.php")
+                    location.replace("index.php")
+                    location.reload()
                 }
                 else if (response.code === 500 || response.code === 409) {
                     alert(response.mensagem);
@@ -108,10 +109,66 @@ $("#form").on('submit', async e => {
                 }
             },
             error: (status, error, xhr) => {
-               alert(`status: ${status}\nerror: ${error}\nxhr: ${xhr}`);
+                alert(`status: ${status}\nerror: ${error}\nxhr: ${xhr}`);
+            }
+        });
+    } catch (error) {
+        alert(`Erro ao enviar o formulário: ${error}`);
+    }
+
+
+});
+
+
+
+$("#formEdit").on("submit", e => {
+    e.preventDefault();
+
+    try {
+        const id = $("#event-id").val();
+        const eventTitle = $("#event-title").val();
+        const eventDescription = $("#event-description").val();
+        const eventDateTime = $("#event-datetime").val();
+        const eventDuration = $("#event-duration").val();
+
+        const formData = new FormData($("#formEdit")[0]);
+
+        formData.append('id', id);
+        formData.append('eventTitle', eventTitle);
+        formData.append('eventDescription', eventDescription);
+        formData.append('eventDateTime', eventDateTime);
+        formData.append('eventDuration', eventDuration);
+
+        const fileInput = $("#event-photo")[0]; // Corrected file input selector
+        const file = fileInput.files[0];
+   
+        if (file !== undefined) {
+            const renamedFile = new File([file], `${eventTitle}-${dateFomater(eventDateTime)}_photo.${file.name.split('.').pop()}`, {
+                type: file.type,
+            });
+            formData.append('eventPhoto', renamedFile);
+        }
+        $.ajax({
+            type: "post",
+            url: "editarEvento.php",
+            contentType: false,
+            processData: false,
+            data: formData,
+            dataType: "json",
+            success: function (response) {
+                if (response.code === 200) {
+                    alert(response.mensagem);
+                    location.replace("index.php");
+                } else {
+                    alert(response.mensagem);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert(`status: ${status}\nerror: ${error}\nxhr: ${xhr}`);
             }
         });
     } catch (error) {
         alert(`Erro ao enviar o formulário: ${error}`);
     }
 });
+
