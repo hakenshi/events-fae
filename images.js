@@ -12,7 +12,7 @@ const removeEvent = (button) => {
 
     $.ajax({
         type: "post",
-        url: "App.php",
+        url: "Delete.php",
         data: {
             id: id
         },

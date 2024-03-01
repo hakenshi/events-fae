@@ -98,7 +98,6 @@ $("#form").on('submit', async e => {
                 if (response.code === 200) {
                     alert(response.mensagem);
                     location.replace("index.php")
-                    location.reload()
                 }
                 else if (response.code === 500 || response.code === 409) {
                     alert(response.mensagem);

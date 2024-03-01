@@ -3,7 +3,6 @@ include("App.php");
 
 $app = new App;
 
-
 $id = $_POST['id'];
 $eventTitle = $_POST['eventTitle'];
 $eventDescription = $_POST['eventDescription'];
@@ -18,6 +17,5 @@ else{
 }
 
 if (isset($_POST['id'],$_POST['eventTitle'], $_POST['eventDescription'], $_POST['eventDateTime'], $_POST['eventDuration'])) {
-    $id = $_POST['id'];
     echo $app->updateEventInfo($id, $eventTitle, $eventDescription, $eventDateTime, $eventDuration, $fileName);
 }
